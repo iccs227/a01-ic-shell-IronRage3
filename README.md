@@ -2,3 +2,5 @@
 # ICSH
 
 Please describe your assumptions and/or implementation here. 
+
+Milestone 1 so far.
