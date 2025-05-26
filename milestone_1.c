@@ -33,7 +33,7 @@ void echo_command(char *buffer) {
 
 void shebang_command(char *buffer) {
     if (strncmp(buffer, "!!", 2) == 0 || strncmp(buffer, "!! ", 3) == 0) {
-        if (strcmp(previous_buffer, "NULL", 4) == 0) {
+        if (strncmp(previous_buffer, "NULL", 4) == 0) {
         } else {
             printf("%s", previous_buffer);
             is_valid_command(previous_buffer);

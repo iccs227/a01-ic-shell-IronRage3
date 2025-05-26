@@ -8,7 +8,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "start_art.h"
+#include "command_check.h"
 
+// for now as safety, will clean up later
+#include "milestone_1.h"
 
 #define MAX_CMD_BUFFER 255
 
