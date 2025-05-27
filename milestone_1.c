@@ -13,6 +13,7 @@ Double checking in case if passed command is a valid command, just to be safe
 */
 
 extern char previous_buffer[MAX_CMD_BUFFER];
+extern int check_valid;
 
 void replace_previous_buffer(char *buffer) {
     // Replace previous buffer for !! command
@@ -20,7 +21,7 @@ void replace_previous_buffer(char *buffer) {
 }
 
 void echo_command(char *buffer) {
-    if (strncmp(buffer, "echo ", 5) == 0) {
+    if (strncmp(buffer, "echo", 4) == 0 || strncmp(buffer, "echo ", 5) == 0) {
         // Store the current command
         // Replace previous buffer for !! command
         replace_previous_buffer(buffer);
@@ -48,7 +49,7 @@ void exit_command(char *buffer) {
     char exit_string[5];
     int temp = 0;
 
-    if (strncmp(buffer, "exit ", count) == 0) {
+    if (strncmp(buffer, "exit", 4) == 0 || strncmp(buffer, "exit ", count) == 0) {
         while (buffer[count] == ' ') {
             count++;
         }
