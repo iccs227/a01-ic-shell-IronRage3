@@ -12,11 +12,16 @@
 
 // for now as safety, will clean up later
 #include "milestone_1.h"
+#include "milestone_2.h"
+
+
 
 #define MAX_CMD_BUFFER 255
 
 char previous_buffer[MAX_CMD_BUFFER] = "NULL";
 int check_valid = 0; // 0 = success, 1 = failure
+// allows valid command function to work for both shell mode or script mode
+int check_empty = 0; // 0 = not empty, 1 = empty
 
 
 char current_mode[MAX_CMD_BUFFER] = "NULL";
@@ -36,10 +41,7 @@ void start_shell() {
 int main(int argc, char *argv[]) {
 
     if (argc > 1) {
-        // to implement
-
-
-        exit(0);
+        iterate_input(argc, argv); // to loop all inputs through script mode
         }
     else {
 
@@ -49,9 +51,14 @@ int main(int argc, char *argv[]) {
         while (1) {
             printf("icsh $ ");
             fgets(buffer, 255, stdin);
-            is_valid_command(buffer); // allows valid command function to work for both shell mode or script mode
+            is_valid_command(buffer); 
+            if (check_empty != 0) {
+                check_empty = 0; // reset check_empty for next command
+                continue;
+            }
             if (check_valid != 0) {   
-                printf("Invalid Command.\n");
+                check_valid = 0; // reset check_valid for next command
+                printf("bad command.\n"); // bad command from milestone 1 important note
             }
 
         }

@@ -9,7 +9,7 @@
 #define MAX_CMD_BUFFER 255
 
 /*
-Double checking in case if passed command is a valid command, just to be safe
+No more double checking for commands - reduce run time.
 */
 
 extern char previous_buffer[MAX_CMD_BUFFER];
@@ -21,27 +21,19 @@ void replace_previous_buffer(char *buffer) {
 }
 
 void echo_command(char *buffer) {
-    if (strncmp(buffer, "echo", 4) == 0 || strncmp(buffer, "echo ", 5) == 0) {
-        // Store the current command
-        // Replace previous buffer for !! command
-        replace_previous_buffer(buffer);
-        printf("%s", buffer + 5);
-
-    } else {
-        printf("Invalid command\n");
-    }
+    // Store the current command
+    // Replace previous buffer for !! command
+    replace_previous_buffer(buffer);
+    printf("%s", buffer + 5);
 }
 
 void shebang_command(char *buffer) {
-    if (strncmp(buffer, "!!", 2) == 0 || strncmp(buffer, "!! ", 3) == 0) {
-        if (strncmp(previous_buffer, "NULL", 4) == 0) {
-        } else {
-            printf("%s", previous_buffer);
-            is_valid_command(previous_buffer);
-        }
-    } else {
-        printf("Invalid command\n");
+    
+    if (strncmp(previous_buffer, "NULL", 4) != 0) {
+        printf("%s", previous_buffer);
+        is_valid_command(previous_buffer);
     }
+    
 }
 
 void exit_command(char *buffer) {
@@ -49,30 +41,28 @@ void exit_command(char *buffer) {
     char exit_string[5];
     int temp = 0;
 
-    if (strncmp(buffer, "exit", 4) == 0 || strncmp(buffer, "exit ", count) == 0) {
-        while (buffer[count] == ' ') {
-            count++;
+    while (buffer[count] == ' ') {
+        count++;
         }
-        while (buffer[count] != '\n' && buffer[count] != '\0' && buffer[count] != ' ') {
-            exit_string[temp] = buffer[count];
-            temp++;
-            count++;
-        }
-        exit_string[temp] = '\0'; // Null terminate the exit code string
-
-        int exit_code = 0; // if not exit code given, default is 0
-        if (temp > 0) {
-            exit_code = atoi(exit_string);
-            exit_code = exit_code & 255; 
-            // ensures exit code is within 0-255 range (all bits which change are lowest 8 bits rest become 0)
-        }
-
-        vegito_start_art();
-        gogeta_start_art();
-        replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
-        printf("Exiting icsh. Goodbye!\n");
-        exit(exit_code); // Exit with the specified exit code
-    } else {
-        printf("Invalid command\n");
+    while (buffer[count] != '\n' && buffer[count] != '\0' && buffer[count] != ' ') {
+        exit_string[temp] = buffer[count];
+        temp++;
+        count++;
     }
+    exit_string[temp] = '\0'; // Null terminate the exit code string
+
+    int exit_code = 0; // if not exit code given, default is 0
+    if (temp > 0) {
+        exit_code = atoi(exit_string);
+        exit_code = exit_code & 255; 
+        // ensures exit code is within 0-255 range (all bits which change are lowest 8 bits rest become 0)
+    }
+
+        // vegito_start_art();
+        // gogeta_start_art();
+
+    replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
+    printf("Exiting icsh. Goodbye!\n");
+    exit(exit_code); // Exit with the specified exit code
+    
 }
