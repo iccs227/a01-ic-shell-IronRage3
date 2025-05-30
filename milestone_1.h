@@ -10,9 +10,12 @@
 
 extern char previous_buffer[MAX_CMD_BUFFER];
 extern int check_valid;
+extern int check_empty;
 
-void replace_previous_buffer(char *buffer);
+
 void echo_command(char *buffer);
+// void echo_command(char *buffer, char *tokenized_buffer, int *tokenized_count);
+
 void shebang_command(char *buffer);
 void exit_command(char *buffer);
 

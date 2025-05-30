@@ -13,6 +13,8 @@ extern char previous_buffer[MAX_CMD_BUFFER];
 extern int check_valid;
 
 void is_valid_command(char *buffer);
+void replace_previous_buffer(char *buffer);
+void tokenize_command(char *buffer, char *tokenized_buffer, int *tokenized_count);
 
 
 #endif

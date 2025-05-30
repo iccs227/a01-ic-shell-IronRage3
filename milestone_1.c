@@ -12,13 +12,14 @@
 No more double checking for commands - reduce run time.
 */
 
-extern char previous_buffer[MAX_CMD_BUFFER];
-extern int check_valid;
 
-void replace_previous_buffer(char *buffer) {
-    // Replace previous buffer for !! command
-    strncpy(previous_buffer, buffer, MAX_CMD_BUFFER);
-}
+// Global variables from icsh.c
+extern char previous_buffer[MAX_CMD_BUFFER];
+extern int check_invalid;
+
+
+
+// moved replace_previous_buffer to command_check.h
 
 void echo_command(char *buffer) {
     // Store the current command
@@ -26,6 +27,20 @@ void echo_command(char *buffer) {
     replace_previous_buffer(buffer);
     printf("%s", buffer + 5);
 }
+
+/*
+
+maybe upgrade echo function to handle more complex echo commands in future milestones
+putting edge cases answers here
+
+void echo_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
+    // Store the current command
+    // Replace previous buffer for !! command
+    replace_previous_buffer(buffer);
+    printf("%s", buffer + 5);
+}
+*/
+
 
 void shebang_command(char *buffer) {
     
@@ -36,7 +51,44 @@ void shebang_command(char *buffer) {
     
 }
 
-void exit_command(char *buffer) {
+void exit_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
+
+    char *exit_string;
+    int exit_code = 0; // Default exit code if none is provided
+
+    if (tokenized_count > 2) {
+        // If more than one argument is given, print error and exit with code 1
+        printf("Error: Too many arguments for exit command.\n");
+    } else if (tokenized_count == 2) {
+        // If one argument is given, check if it's a valid exit code
+
+        exit_string = tokenized_buffer[1];
+        exit_code = atoi(exit_string);
+        exit_code = exit_code & 255;
+        
+        printf("Exiting icsh with code %d\n", exit_code);
+        exit(exit_code); // Exit with the specified exit code
+        
+    } else if (tokenized_count == 1) {
+        
+            // vegito_start_art();
+            // gogeta_start_art();
+
+        replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
+        printf("Exiting icsh. Goodbye!\n");
+        exit(exit_code);
+        
+    } else {
+        check_invalid = 1; // Set invalid command flag
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     int count = 5;
     char exit_string[5];
     int temp = 0;
@@ -58,11 +110,6 @@ void exit_command(char *buffer) {
         // ensures exit code is within 0-255 range (all bits which change are lowest 8 bits rest become 0)
     }
 
-        // vegito_start_art();
-        // gogeta_start_art();
 
-    replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
-    printf("Exiting icsh. Goodbye!\n");
-    exit(exit_code); // Exit with the specified exit code
     
 }
