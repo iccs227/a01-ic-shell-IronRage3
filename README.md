@@ -53,6 +53,5 @@ Please describe your assumptions and/or implementation here.
 1. Plan changed - No more echo upgrade
 2. Print custom art for launching shell in normal mode
 3. if input is exit command - prints custom art
-4. Art is custom based of terminal size - 2 different art and sizes.
 
 ===========================================================================
