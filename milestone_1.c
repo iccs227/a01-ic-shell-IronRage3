@@ -17,6 +17,8 @@ No more double checking for commands - reduce run time.
 // Global variables from icsh.c
 extern char previous_buffer[MAX_CMD_BUFFER];
 extern int check_invalid;
+extern int last_exit_code;
+
 
 
 
@@ -35,7 +37,13 @@ void echo_command(char *buffer, int *tokenized_count) {
         while (buffer[temp] == ' ' || buffer[temp] == '\t') {
             temp++;
         }
-        printf("%s", buffer + temp + 5);
+        if (strncmp(buffer + temp + 5, "$?", 2) == 0 && last_exit_code != -1) {
+            // If the command is not "echo", just print the buffer as is
+            printf("%d", last_exit_code);
+            return;
+        }else {
+            printf("%s", buffer + temp + 5);
+        }
     }
 }
 

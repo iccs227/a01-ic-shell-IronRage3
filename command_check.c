@@ -18,8 +18,7 @@ extern is used for variables that are defined in another file. global variable a
 extern char previous_buffer[MAX_CMD_BUFFER];
 extern int check_invalid;
 extern int check_empty;
-
-
+extern int last_exit_code;
 
 
 void is_valid_command(char *buffer) {
@@ -88,7 +87,9 @@ converts given input into array entries seperated by spaces
 
 void tokenize_command(char *copy_buffer, char *tokenized_buffer[], int *tokenized_count) {
     int i = 0;
-    char *token_arg = strtok(copy_buffer, " \t\r\n"); // Tokenize the input buffer by spaces, tabs, and newlines
+    char *saveptr;
+    char *token_arg = strtok_r(copy_buffer, " \t\r\n", &saveptr); // Tokenize the input buffer by spaces, tabs, and newlines
+    
     if (token_arg == NULL) {
         *tokenized_count = 0; // If no tokens found, set count to 0
         return; // Early exit if no tokens
@@ -102,20 +103,14 @@ void tokenize_command(char *copy_buffer, char *tokenized_buffer[], int *tokenize
             
             tokenized_buffer[i] = token_arg;
             i++;
-            token_arg = strtok(NULL, " ");
+            token_arg = strtok_r(NULL, " ", &saveptr);
         }
     
         *tokenized_count = i; // Update the count of tokens
         tokenized_buffer[i] = NULL;
 
         // testing tokenizing works as intended
-        // for (int j = 0; j < i; j++) {
-        //     if (tokenized_buffer[j] == NULL) {
-        //         printf("Token %d: NULL\n", j); // Debugging line to see tokens
-        //}
-        //     printf("Token %d: %s\n", j, tokenized_buffer[j]); // Debugging line to see tokens
-        // }
-
+        
         // for (int j = 0; j < i; j++) {
         //     printf("Token %d: '%s' [hex: ", j, tokenized_buffer[j]);
         //     for (int k = 0; tokenized_buffer[j][k]; k++) {

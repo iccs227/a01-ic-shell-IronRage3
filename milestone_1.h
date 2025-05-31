@@ -9,8 +9,9 @@
 
 #define MAX_CMD_BUFFER 255
 
+// Global variables from icsh.c
 extern char previous_buffer[MAX_CMD_BUFFER];
-extern int check_valid;
+extern int check_invalid;
 extern int check_empty;
 
 
