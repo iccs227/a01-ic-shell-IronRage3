@@ -42,7 +42,6 @@ void start_shell() {
     printf("Welcome to icsh!\n");
     printf("This is made by Hardik Vijay\n");
     printf("Except the start art\n");
-    gogeta_start_art();
     vegito_start_art();
     printf("Art was not made by me, but Uroll Insipred me.\n");
 }

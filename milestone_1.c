@@ -86,6 +86,7 @@ void exit_command(char *buffer) {
     // } else {
     //         // gogeta_start_art();
     // }
+    gogeta_start_art();
 
     replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
     printf("Exiting icsh. Goodbye!\n");
