@@ -19,29 +19,37 @@ extern int check_invalid;
 extern int check_empty;
 
 
-void execute_external_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
+void execute_external_command(char *buffer, char *tokenized_buffer[]) {
 
-
-    pid_t pid; = fork(); // Create a new process
+    pid_t pid = fork(); // Create a new process
 
     if (pid < 0) {
         perror("Fork failed");
-        exit(errno);
+        check_invalid = 1; // Set invalid command flag
+        return; 
+        // Exit the function on fork failure - return early in case code has new entries after if else statements
 
     } else if (pid == 0) {
         // Child process
         execvp (tokenized_buffer[0], tokenized_buffer); // Execute the command
-        perror("execvp failed"); // If execvp fails, print error - for local testing
+        perror("Execution failed"); // If execvp fails, it returns -1 and sets errno
         exit(errno);
 
     }else {
-        int *status;
+        int status;
         waitpid(pid, &status, 0); // Parent process waits for child to finish
 
-        int exit_status = WEXITSTATUS(status);
+        if (WIFEXITED(status)) {
+            int exit_status = WEXITSTATUS(status);
+
+            if (exit_status != 0) {
+                check_invalid = 1; // to prevent previous buffer from being replaced as this one did not execute successfully
+            } else{
+                replace_previous_buffer(buffer);
+            }
         
-        if (exit_status != 0) {
-            check_invalid = 1;
+        } else {
+            check_invalid = 1; // for now process anything exit from "WIFEXITED = false" as invalid command
         }
 
     }

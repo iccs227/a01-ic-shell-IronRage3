@@ -10,7 +10,7 @@
 
 
 extern char previous_buffer[MAX_CMD_BUFFER];
-extern int check_valid;
+extern int check_invalid;
 extern int check_empty;
 
 void script_mode(int argc, char *argv[]) {
@@ -26,8 +26,8 @@ void script_mode(int argc, char *argv[]) {
         if (check_empty != 0) {
             check_empty = 0;
         }
-        if (check_valid != 0) {
-            check_valid = 0; 
+        if (check_invalid != 0) {
+            check_invalid = 0; 
             printf("Invalid Command: %s", buffer);
         }
     }

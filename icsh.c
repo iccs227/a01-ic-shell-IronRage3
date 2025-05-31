@@ -13,6 +13,7 @@
 // for now as safety, will clean up later
 #include "milestone_1.h"
 #include "milestone_2.h"
+#include "milestone_3.h"
 
 
 
@@ -53,7 +54,12 @@ int main(int argc, char *argv[]) {
             printf("icsh $ ");
             fgets(buffer, 255, stdin);
             is_valid_command(buffer);
-
+            if (check_empty != 0) {
+                check_empty = 0; // reset check_empty for next command
+            } else if (check_valid != 0) {   
+                check_valid = 0; // reset check_valid for next command
+                printf("bad command.\n"); // bad command from milestone 1 important note
+            }
         }
     }
             // printf("you said: %s\n", buffer); (starter code)

@@ -5,6 +5,7 @@
 #include <string.h>
 #include "start_art.h"
 #include "command_check.h"
+#include "milestone_3.h"
 
 #define MAX_CMD_BUFFER 255
 
@@ -13,10 +14,10 @@ extern int check_valid;
 extern int check_empty;
 
 
-void echo_command(char *buffer);
-// void echo_command(char *buffer, char *tokenized_buffer, int *tokenized_count);
+void echo_command(char *buffer, int *tokenized_count);
+// void echo_command(char *buffer, char **tokenized_buffer, int *tokenized_count);
 
-void shebang_command(char *buffer);
+void repeat_command(char *buffer);
 void exit_command(char *buffer);
 
 

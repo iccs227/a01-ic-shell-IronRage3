@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <stdbool.h>
 #include "milestone_1.h"
+#include "milestone_3.h"
 
 #define MAX_CMD_BUFFER 255
 
@@ -14,7 +15,7 @@ extern int check_valid;
 
 void is_valid_command(char *buffer);
 void replace_previous_buffer(char *buffer);
-void tokenize_command(char *buffer, char *tokenized_buffer, int *tokenized_count);
+void tokenize_command(char *buffer, char *tokenized_buffer[], int *tokenized_count);
 
 
 #endif

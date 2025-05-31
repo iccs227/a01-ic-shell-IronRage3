@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "milestone_1.h"
 #include "start_art.h"
 #include "command_check.h"
@@ -21,19 +22,31 @@ extern int check_invalid;
 
 // moved replace_previous_buffer to command_check.h
 
-void echo_command(char *buffer) {
+void echo_command(char *buffer, int *tokenized_count) {
     // Store the current command
     // Replace previous buffer for !! command
     replace_previous_buffer(buffer);
-    printf("%s", buffer + 5);
+
+    if ((*tokenized_count) == 1) {
+        // If no string is provided after "echo", just print a newline
+        printf("\n");
+    } else {
+        int temp = 0;
+        while (buffer[temp] == ' ' || buffer[temp] == '\t') {
+            temp++;
+        }
+        printf("%s", buffer + temp + 5);
+    }
 }
+
+
 
 /*
 
 maybe upgrade echo function to handle more complex echo commands in future milestones
 putting edge cases answers here
 
-void echo_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
+void echo_command(char *buffer, char *tokenized_buffer[], int *tokenized_count) {
     // Store the current command
     // Replace previous buffer for !! command
     replace_previous_buffer(buffer);
@@ -42,7 +55,7 @@ void echo_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
 */
 
 
-void shebang_command(char *buffer) {
+void repeat_command(char *buffer) { // changed name so it is more readable
     
     if (strncmp(previous_buffer, "NULL", 4) != 0) {
         printf("%s", previous_buffer);
@@ -51,65 +64,22 @@ void shebang_command(char *buffer) {
     
 }
 
-void exit_command(char *buffer, char *tokenized_buffer, int *tokenized_count) {
+void exit_command(char *buffer) {
 
-    char *exit_string;
+    char *exit_string = buffer + 5;
     int exit_code = 0; // Default exit code if none is provided
 
-    if (tokenized_count > 2) {
-        // If more than one argument is given, print error and exit with code 1
-        printf("Error: Too many arguments for exit command.\n");
-    } else if (tokenized_count == 2) {
-        // If one argument is given, check if it's a valid exit code
-
-        exit_string = tokenized_buffer[1];
-        exit_code = atoi(exit_string);
-        exit_code = exit_code & 255;
+    exit_code = atoi(exit_string);
+    exit_code = exit_code & 255;
+    exit(exit_code); // Exit with the specified exit code
         
-        printf("Exiting icsh with code %d\n", exit_code);
-        exit(exit_code); // Exit with the specified exit code
-        
-    } else if (tokenized_count == 1) {
-        
-            // vegito_start_art();
-            // gogeta_start_art();
+    // if (condition based of terminal size print different art) { // future milestone implementation maybe
+    //         // vegito_start_art();
+    // } else {
+    //         // gogeta_start_art();
+    // }
 
-        replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
-        printf("Exiting icsh. Goodbye!\n");
-        exit(exit_code);
-        
-    } else {
-        check_invalid = 1; // Set invalid command flag
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    int count = 5;
-    char exit_string[5];
-    int temp = 0;
-
-    while (buffer[count] == ' ') {
-        count++;
-        }
-    while (buffer[count] != '\n' && buffer[count] != '\0' && buffer[count] != ' ') {
-        exit_string[temp] = buffer[count];
-        temp++;
-        count++;
-    }
-    exit_string[temp] = '\0'; // Null terminate the exit code string
-
-    int exit_code = 0; // if not exit code given, default is 0
-    if (temp > 0) {
-        exit_code = atoi(exit_string);
-        exit_code = exit_code & 255; 
-        // ensures exit code is within 0-255 range (all bits which change are lowest 8 bits rest become 0)
-    }
-
-
-    
+    replace_previous_buffer("NULL"); // fail safe to reset previous buffer if double isch happens (unsure)
+    printf("Exiting icsh. Goodbye!\n");
+    exit(exit_code);
 }

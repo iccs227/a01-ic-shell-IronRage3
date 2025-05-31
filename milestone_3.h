@@ -20,7 +20,7 @@ extern char previous_buffer[MAX_CMD_BUFFER];
 extern int check_invalid;
 extern int check_empty;
 
-void execute_external_command(char *buffer, char *tokenized_buffer, int *tokenized_count);
+void execute_external_command(char *buffer, char *tokenized_buffer[]);
 
 
 
